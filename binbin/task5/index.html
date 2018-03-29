@@ -1,0 +1,120 @@
+<!DOCTYPE>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>IFE JavaScript Task 05</title>
+  <style>
+    li {
+      float: left;
+      list-style: none;
+      background: red;
+      color: white;
+      font-size: 20px;
+      text-align: center;
+      padding: 5px;
+      margin: 5px;
+      height: 90px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div>
+    <div>
+      <input type="text" id="input-num">
+      <button id="add-left">左侧入</button>
+      <button id="add-right">右侧入</button>
+      <button id="remove-left">左侧出</button>
+      <button id="remove-right">右侧出</button>
+    </div>
+  </div>
+
+  <ul id="queue-num"></ul>
+
+  <script type="text/javascript">
+
+    const queueUl = document.getElementById('queue-num')
+    const input = document.getElementById('input-num')
+
+    function getInputValue() {
+      const reg = /^[0-9]|[1−9][0−9]+/
+      if (!reg.test(input.value)) {
+        alert('please input a number!')
+        return undefined 
+      }
+
+      const valueInt = parseInt(input.value)
+      if (valueInt > 100 || valueInt < 10) {
+        alert('please input a number between 10 - 100!')
+        return undefined
+      }
+
+      return valueInt
+    }
+
+    function add(direction) {
+      
+      if (queueUl.childNodes.length >= 60) {
+        alert('最多只能插入60个')
+        return
+      }
+
+      let value = getInputValue()
+      if (!value) {
+        return
+      }
+      const li = createLi(value)
+      switch (direction) {
+        case 0:
+          queueUl.insertBefore(li, queueUl.firstChild)
+          break
+        case 1:
+          queueUl.appendChild(li)
+          break
+      }
+    }
+
+    function createLi(value) {
+      const li = document.createElement('li')
+      li.innerText = value
+      return li
+    }
+
+    function remove(direction) {
+      if (!direction) {
+        return
+      }
+      switch (direction) {
+        case 0:
+          queueUl.removeChild(queueUl.firstChild)
+          break
+        case 1:
+          queueUl.removeChild(queueUl.lastChild)
+          break
+        default:
+          queueUl.removeChild(direction)
+          break
+      }
+    }
+
+    function removeSelf(element) {
+      element.remove()
+    }
+
+    function initClickEvent() {
+      document.getElementById('add-left').onclick = () => add(0)
+      document.getElementById('add-right').onclick = () => add(1)
+      document.getElementById('remove-left').onclick = () => remove(0)
+      document.getElementById('remove-right').onclick = () => remove(1)
+      queueUl.onclick = () => remove(event.target)
+    }
+
+    (function () {
+      initClickEvent()
+    })()
+  </script>
+</body>
+
+</html>
